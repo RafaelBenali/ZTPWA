@@ -256,8 +256,13 @@ function showToast(msg) {
 btnPaste.addEventListener('click', async () => {
   try {
     textarea.blur();
-    const text = await navigator.clipboard.readText();
-    textarea.value = text;
+    const clip = await navigator.clipboard.readText();
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const before = textarea.value.slice(0, start);
+    const after = textarea.value.slice(end);
+    textarea.value = before + clip + after;
+    textarea.selectionStart = textarea.selectionEnd = start + clip.length;
     lastDiffChanges = null;
     updateValidation();
     textarea.focus();
