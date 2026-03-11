@@ -257,6 +257,7 @@ btnPaste.addEventListener('click', async () => {
   try {
     textarea.blur();
     const clip = await navigator.clipboard.readText();
+    pushUndo(textarea.value);
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const before = textarea.value.slice(0, start);
