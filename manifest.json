@@ -1,0 +1,21 @@
+{
+  "name": "ZT Валидатор",
+  "short_name": "ZT Valid",
+  "description": "Проверка и исправление текста для zt.ru",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1a73e8",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

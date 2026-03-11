@@ -1,0 +1,16 @@
+# Dev tools
+.claude/
+.DS_Store
+
+# Test files (not part of the app)
+test-samples/
+
+# OpenSpec project management
+openspec/
+
+# Editor
+*.swp
+*.swo
+*~
+.idea/
+.vscode/

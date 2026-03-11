@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZT Валидатор</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#1a73e8">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>ZT Валидатор</h1>
+      <p class="subtitle">Проверка и исправление текста для zt.ru</p>
+    </header>
+
+    <div class="toolbar">
+      <button id="btn-paste" class="btn" title="Вставить из буфера обмена">Вставить</button>
+      <button id="btn-fix" class="btn btn-primary" title="Исправить недопустимые символы">Исправить</button>
+      <button id="btn-copy" class="btn" title="Копировать результат">Копировать</button>
+      <button id="btn-undo" class="btn" disabled title="Отменить последнее исправление">Отменить</button>
+      <button id="btn-pwa" class="btn btn-secondary" title="Установить как приложение">Установить</button>
+    </div>
+
+    <div class="editor-container">
+      <div id="overlay" class="overlay" aria-hidden="true"></div>
+      <textarea id="textarea" class="textarea" placeholder="Вставьте текст для проверки..."></textarea>
+    </div>
+
+    <div class="status-bar">
+      <span id="status-text">Готово</span>
+      <span id="char-count"></span>
+    </div>
+  </div>
+
+  <!-- PWA Install Modal -->
+  <div id="pwa-modal" class="modal-backdrop" hidden>
+    <div class="modal">
+      <button class="modal-close" aria-label="Закрыть">&times;</button>
+      <h2>Установить как приложение</h2>
+      <div class="modal-body">
+        <h3>Chrome (компьютер)</h3>
+        <p>Нажмите на иконку установки (⊕) в адресной строке справа, затем «Установить».</p>
+
+        <h3>Chrome (Android)</h3>
+        <p>Нажмите меню (⋮) → «Установить приложение» или «Добавить на главный экран».</p>
+
+        <h3>Safari (iPhone/iPad)</h3>
+        <p>Нажмите кнопку «Поделиться» (⬆) → «На экран Домой».</p>
+
+        <h3>Firefox</h3>
+        <p>Firefox не поддерживает установку PWA. Используйте Chrome или Safari.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>
