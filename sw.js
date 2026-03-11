@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'zt-validator-v2';
+const CACHE_VERSION = 'zt-validator-v3';
 const ASSETS = [
   './',
   './index.html',

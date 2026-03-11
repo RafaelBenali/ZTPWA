@@ -140,6 +140,7 @@ const btnPaste = document.getElementById('btn-paste');
 const btnFix = document.getElementById('btn-fix');
 const btnCopy = document.getElementById('btn-copy');
 const btnUndo = document.getElementById('btn-undo');
+const btnReset = document.getElementById('btn-reset');
 const btnInfo = document.getElementById('btn-info');
 const btnPwa = document.getElementById('btn-pwa');
 const infoModal = document.getElementById('info-modal');
@@ -254,10 +255,12 @@ function showToast(msg) {
 // Buttons
 btnPaste.addEventListener('click', async () => {
   try {
+    textarea.blur();
     const text = await navigator.clipboard.readText();
     textarea.value = text;
     lastDiffChanges = null;
     updateValidation();
+    textarea.focus();
   } catch {
     showToast('Нет доступа к буферу. Используйте Ctrl+V');
   }
@@ -286,6 +289,14 @@ btnCopy.addEventListener('click', async () => {
 btnUndo.addEventListener('click', () => {
   if (!canUndo()) return;
   textarea.value = popUndo();
+  lastDiffChanges = null;
+  updateValidation();
+});
+
+btnReset.addEventListener('click', () => {
+  if (!textarea.value) return;
+  pushUndo(textarea.value);
+  textarea.value = '';
   lastDiffChanges = null;
   updateValidation();
 });
