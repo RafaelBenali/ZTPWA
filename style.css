@@ -54,18 +54,19 @@ html, body {
   font-weight: 600;
   letter-spacing: -0.02em;
 }
-
+ 
 .btn-offline {
-  position: fixed;
-  right: 12px;
-  top: 8px;
-  z-index: 50;
-  color: var(--text-secondary);
-  border-color: transparent;
-  background: transparent;
-  font-size: 0.75rem;
-  padding: 5px 10px;
-  gap: 4px;
+	position: absolute;
+	right: 0;
+	top: 0px;
+	z-index: 50;
+	color: var(--text-secondary);
+	border-color: transparent;
+	background: transparent;
+	font-size: 12px !important;
+	padding: 5px 10px !important;
+	gap: 4px;
+	letter-spacing: 2px;
 }
 
 .btn-offline:hover {
