@@ -2,11 +2,11 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ZT Валидатор</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
-  <meta name="theme-color" content="#1a73e8">
+  <meta name="theme-color" content="#1c1c1e">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
 </head>
@@ -14,15 +14,36 @@
   <div class="app">
     <header class="header">
       <h1>ZT Валидатор</h1>
-      <p class="subtitle">Проверка и исправление текста для zt.ru</p>
+      <button id="btn-pwa" class="btn btn-icon btn-offline" title="Offline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18h.01"/><path d="M9.17 15a3 3 0 0 1 5.66 0"/><path d="M6.34 12a6 6 0 0 1 11.32 0"/><path d="M3.51 9a9 9 0 0 1 16.98 0"/></svg>
+      </button>
     </header>
 
     <div class="toolbar">
-      <button id="btn-paste" class="btn" title="Вставить из буфера обмена">Вставить</button>
-      <button id="btn-fix" class="btn btn-primary" title="Исправить недопустимые символы">Исправить</button>
-      <button id="btn-copy" class="btn" title="Копировать результат">Копировать</button>
-      <button id="btn-undo" class="btn" disabled title="Отменить последнее исправление">Отменить</button>
-      <button id="btn-pwa" class="btn btn-secondary" title="Установить как приложение">Установить</button>
+      <div class="toolbar-row">
+        <button id="btn-paste" class="btn btn-full" title="Вставить из буфера обмена">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+          Вставить
+        </button>
+      </div>
+      <div class="toolbar-row">
+        <button id="btn-fix" class="btn btn-primary btn-grow" title="Заменить или удалить недопустимые символы">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          Исправить
+        </button>
+        <button id="btn-info" class="btn btn-icon" title="Какие символы проверяются">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        </button>
+        <button id="btn-undo" class="btn btn-icon" disabled title="Отменить последнее исправление">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        </button>
+      </div>
+      <div class="toolbar-row">
+        <button id="btn-copy" class="btn btn-full" title="Копировать результат">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Копировать
+        </button>
+      </div>
     </div>
 
     <div class="editor-container">
@@ -36,28 +57,58 @@
     </div>
   </div>
 
-  <!-- PWA Install Modal -->
-  <div id="pwa-modal" class="modal-backdrop" hidden>
+  <!-- Info Modal -->
+  <div id="info-modal" class="modal-backdrop" hidden>
     <div class="modal">
       <button class="modal-close" aria-label="Закрыть">&times;</button>
-      <h2>Установить как приложение</h2>
+      <h2>Какие символы проверяются</h2>
       <div class="modal-body">
-        <h3>Chrome (компьютер)</h3>
-        <p>Нажмите на иконку установки (⊕) в адресной строке справа, затем «Установить».</p>
+        <h3>Заменяются автоматически</h3>
+        <table class="char-table">
+          <tr><th>Символ</th><th>Замена</th></tr>
+          <tr><td><code>&#x2212;</code> минус (U+2212)</td><td><code>-</code> дефис</td></tr>
+          <tr><td><code>&#x2033;</code> двойной штрих (U+2033)</td><td><code>"</code> кавычка</td></tr>
+          <tr><td><code>&#x20BD;</code> знак рубля (U+20BD)</td><td><code>руб.</code> текст</td></tr>
+          <tr><td>тонкий пробел (U+2009)</td><td>обычный пробел</td></tr>
+          <tr><td>длинный пробел (U+2003)</td><td>обычный пробел</td></tr>
+          <tr><td>средний пробел (U+2002)</td><td>обычный пробел</td></tr>
+          <tr><td>табуляция</td><td>обычный пробел</td></tr>
+        </table>
 
-        <h3>Chrome (Android)</h3>
-        <p>Нажмите меню (⋮) → «Установить приложение» или «Добавить на главный экран».</p>
+        <h3>Удаляются</h3>
+        <table class="char-table">
+          <tr><td>Пробел нулевой ширины (U+200B)</td></tr>
+          <tr><td>Селекторы вариантов (U+FE0F, U+FE0E)</td></tr>
+          <tr><td>Все эмодзи (кроме &copy; &trade; &reg;)</td></tr>
+        </table>
 
-        <h3>Safari (iPhone/iPad)</h3>
-        <p>Нажмите кнопку «Поделиться» (⬆) → «На экран Домой».</p>
-
-        <h3>Firefox</h3>
-        <p>Firefox не поддерживает установку PWA. Используйте Chrome или Safari.</p>
+        <h3>Допустимые символы</h3>
+        <p>Кавычки: &laquo;&raquo; &ldquo;&rdquo; &lsquo;&rsquo; &bdquo; " '</p>
+        <p>Тире: &mdash; &ndash; -</p>
+        <p>Символы: &copy; &trade; &reg; &deg; &#8470; &bull; &times; &hellip;</p>
+        <p>Неразрывный пробел, кириллица, латиница, цифры, переносы строк</p>
       </div>
     </div>
   </div>
 
-  <!-- Toast notification -->
+  <!-- PWA Modal -->
+  <div id="pwa-modal" class="modal-backdrop" hidden>
+    <div class="modal">
+      <button class="modal-close" aria-label="Закрыть">&times;</button>
+      <h2>Offline</h2>
+      <div class="modal-body">
+        <p>Приложение работает полностью локально и доступно без интернета после первого открытия.</p>
+        <h3>Установить на устройство</h3>
+        <h3>Chrome (Android)</h3>
+        <p>Меню (&vellip;) &rarr; &laquo;Установить приложение&raquo;.</p>
+        <h3>Safari (iPhone/iPad)</h3>
+        <p>Кнопка &laquo;Поделиться&raquo; &rarr; &laquo;На экран Домой&raquo;.</p>
+        <h3>Chrome (компьютер)</h3>
+        <p>Иконка установки в адресной строке справа.</p>
+      </div>
+    </div>
+  </div>
+
   <div id="toast" class="toast" hidden></div>
 
   <script src="app.js"></script>
